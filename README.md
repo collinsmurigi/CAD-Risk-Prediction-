@@ -1,2 +1,2 @@
 # CAD-Risk-Prediction-
-SCHOO; PROJECT
+SCHOOL; PROJECT
