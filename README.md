@@ -4,7 +4,7 @@ SCHOOL; PROJECT
 install python
 Create a venv for environment
 Activate venv
-Install requiremengts in venv 
+Install requirements in venv 
 run start.py to train model
 it will also  start the application
 ////////////////////////////////////////////////////////////////////
