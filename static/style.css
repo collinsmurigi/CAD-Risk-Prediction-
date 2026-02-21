@@ -1,0 +1,47 @@
+/* Custom styles for CAD Risk Prediction System */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    border: none;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.feature-item {
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+/* Print styles */
+@media print {
+    .navbar, .btn, footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000;
+        box-shadow: none;
+    }
+}

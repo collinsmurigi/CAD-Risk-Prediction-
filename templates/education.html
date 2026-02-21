@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Resources - CAD Risk Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .info-card {
+            transition: transform 0.2s;
+            height: 100%;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .risk-factor-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: normal;
+            margin: 4px;
+            display: inline-block;
+        }
+        .modifiable { background-color: #fff3cd; color: #856404; }
+        .non-modifiable { background-color: #f8d7da; color: #721c24; }
+        .lifestyle { background-color: #d4edda; color: #155724; }
+        
+        .video-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .faq-item {
+            border-left: 3px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <i class="bi bi-heart-pulse"></i> CAD Risk Prediction
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <!-- Hero Section -->
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <h1><i class="bi bi-journal-bookmark-fill text-primary"></i> Understanding CAD Risk</h1>
+                <p class="lead">Educational resources for healthcare professionals and patients</p>
+            </div>
+        </div>
+        
+        <!-- Quick Navigation -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="#what-is-cad" class="btn btn-outline-primary"><i class="bi bi-question-circle"></i> What is CAD?</a>
+                            <a href="#risk-factors" class="btn btn-outline-primary"><i class="bi bi-exclamation-triangle"></i> Risk Factors</a>
+                            <a href="#prevention" class="btn btn-outline-primary"><i class="bi bi-heart"></i> Prevention</a>
+                            <a href="#faq" class="btn btn-outline-primary"><i class="bi bi-chat-dots"></i> FAQ</a>
+                            <a href="#resources" class="btn btn-outline-primary"><i class="bi bi-link"></i> Resources</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- What is CAD Section -->
+        <div id="what-is-cad" class="row mb-4">
+            <div class="col-md-12">
+                <div class="card info-card">
+                    <div class="card-body">
+                        <h3 class="card-title"><i class="bi bi-question-circle-fill text-primary"></i> What is Coronary Artery Disease (CAD)?</h3>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p>Coronary Artery Disease (CAD) is the most common type of heart disease. It occurs when the arteries that supply blood to the heart muscle become hardened and narrowed due to buildup of cholesterol and other materials, called plaque, on their inner walls. This buildup is called atherosclerosis.</p>
+                                <p>As plaque builds up, the arteries narrow over time, reducing blood flow to the heart. This can lead to chest pain (angina), shortness of breath, or even a heart attack if a plaque ruptures and completely blocks blood flow.</p>
+                                <h5 class="mt-4">Key Facts:</h5>
+                                <ul>
+                                    <li>CAD is the leading cause of death worldwide</li>
+                                    <li>Early detection and management can significantly reduce risks</li>
+                                    <li>Many risk factors are modifiable through lifestyle changes</li>
+                                    <li>Regular screening is recommended for at-risk individuals</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="video-placeholder">
+                                    <i class="bi bi-play-circle-fill" style="font-size: 48px;"></i>
+                                    <h5 class="mt-3">Heart Anatomy Video</h5>
+                                    <p class="small">Interactive 3D model coming soon</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Risk Factors Section -->
+        <div id="risk-factors" class="row mb-4">
+            <div class="col-md-12">
+                <h3><i class="bi bi-exclamation-triangle-fill text-warning"></i> Risk Factors for CAD</h3>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card info-card border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="bi bi-sliders"></i> Modifiable Risk Factors</h5>
+                    </div>
+                    <div class="card-body">
+                        <span class="risk-factor-badge modifiable">High Blood Pressure</span>
+                        <span class="risk-factor-badge modifiable">High Cholesterol</span>
+                        <span class="risk-factor-badge modifiable">Smoking</span>
+                        <span class="risk-factor-badge modifiable">Diabetes</span>
+                        <span class="risk-factor-badge modifiable">Obesity</span>
+                        <span class="risk-factor-badge modifiable">Physical Inactivity</span>
+                        <span class="risk-factor-badge modifiable">Unhealthy Diet</span>
+                        <span class="risk-factor-badge modifiable">Stress</span>
+                        <hr>
+                        <p class="mb-0"><strong>Impact:</strong> These factors can be controlled through lifestyle changes and medication, significantly reducing CAD risk.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card info-card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="bi bi-lock"></i> Non-Modifiable Risk Factors</h5>
+                    </div>
+                    <div class="card-body">
+                        <span class="risk-factor-badge non-modifiable">Age (≥45 for men, ≥55 for women)</span>
+                        <span class="risk-factor-badge non-modifiable">Family History</span>
+                        <span class="risk-factor-badge non-modifiable">Gender (Male)</span>
+                        <span class="risk-factor-badge non-modifiable">Race/Ethnicity</span>
+                        <hr>
+                        <p class="mb-0"><strong>Impact:</strong> While these cannot be changed, awareness helps guide screening frequency and preventive measures.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card info-card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-heart"></i> Protective Factors</h5>
+                    </div>
+                    <div class="card-body">
+                        <span class="risk-factor-badge lifestyle">Regular Exercise</span>
+                        <span class="risk-factor-badge lifestyle">Healthy Diet</span>
+                        <span class="risk-factor-badge lifestyle">Normal BMI</span>
+                        <span class="risk-factor-badge lifestyle">No Smoking</span>
+                        <span class="risk-factor-badge lifestyle">Stress Management</span>
+                        <span class="risk-factor-badge lifestyle">Regular Check-ups</span>
+                        <hr>
+                        <p class="mb-0"><strong>Impact:</strong> Incorporating these factors can significantly reduce CAD risk and improve overall health.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Prevention Section -->
+        <div id="prevention" class="row mb-4">
+            <div class="col-md-12">
+                <div class="card info-card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="bi bi-shield-check"></i> Prevention Strategies</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><i class="bi bi-activity"></i> Lifestyle Modifications</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> 150 minutes of moderate exercise weekly</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Heart-healthy Mediterranean diet</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Maintain healthy weight (BMI 18.5-24.9)</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Limit alcohol consumption</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Smoking cessation</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Stress reduction techniques</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="bi bi-capsule"></i> Medical Management</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary"></i> Regular blood pressure monitoring</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary"></i> Cholesterol screening every 4-6 years</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary"></i> Diabetes screening if at risk</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary"></i> Aspirin therapy if indicated</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary"></i> Statins for high cholesterol</li>
+                                    <li class="list-group-item"><i class="bi bi-check-circle-fill text-primary"></i> Blood pressure medications if needed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FAQ Section -->
+        <div id="faq" class="row mb-4">
+            <div class="col-md-12">
+                <h3><i class="bi bi-chat-dots-fill"></i> Frequently Asked Questions</h3>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="faq-item">
+                    <h5><i class="bi bi-question-circle"></i> What are the early warning signs?</h5>
+                    <p>Early signs may include chest discomfort (angina), shortness of breath, fatigue with exertion, and palpitations. However, some people may have no symptoms until a heart attack occurs.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h5><i class="bi bi-question-circle"></i> How often should I be screened?</h5>
+                    <p>Adults should have their cholesterol checked every 4-6 years starting at age 20. More frequent screening is recommended if you have risk factors or abnormal results.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h5><i class="bi bi-question-circle"></i> Can CAD be reversed?</h5>
+                    <p>While CAD cannot be completely reversed, aggressive lifestyle changes and medications can slow progression and sometimes partially reverse plaque buildup.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="faq-item">
+                    <h5><i class="bi bi-question-circle"></i> What's a normal blood pressure?</h5>
+                    <p>Normal blood pressure is less than 120/80 mmHg. Elevated blood pressure (120-129/<80) increases risk and should be monitored.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h5><i class="bi bi-question-circle"></i> How accurate is this risk prediction tool?</h5>
+                    <p>Our tool uses validated algorithms based on Framingham Heart Study data. While highly predictive, it's for educational purposes and should be used alongside clinical judgment.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h5><i class="bi bi-question-circle"></i> What should I do with high-risk results?</h5>
+                    <p>High-risk results warrant immediate consultation with a cardiologist for comprehensive evaluation and management planning.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resources Section -->
+        <div id="resources" class="row mb-4">
+            <div class="col-md-12">
+                <div class="card info-card">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="bi bi-link-45deg"></i> Additional Resources</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-file-pdf text-danger"></i> Patient Education Brochure
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-file-pdf text-danger"></i> Dietary Guidelines
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-link"></i> American Heart Association
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-link"></i> CDC Heart Disease
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-play-circle"></i> Video Library
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-calendar"></i> Webinar Schedule
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <h4>Ready to assess a patient's CAD risk?</h4>
+                        <p class="mb-3">Use our evidence-based risk assessment tool to evaluate and manage CAD risk.</p>
+                        <a href="{{ url_for('assessment') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-plus-circle"></i> Start New Assessment
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mt-5 py-3 bg-light text-center">
+        <div class="container">
+            <small class="text-muted">
+                CAD Risk Prediction System | Educational Resources | Evidence-based information for better heart health
+            </small>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

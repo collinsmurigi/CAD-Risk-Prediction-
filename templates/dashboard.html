@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CAD Risk Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .stat-card {
+            transition: transform 0.2s;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .quick-action-btn {
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        .quick-action-btn:hover {
+            transform: translateX(5px);
+        }
+        .risk-badge {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+        .welcome-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .activity-timeline {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .activity-item {
+            border-left: 3px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 0;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #007bff;
+        }
+        .activity-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+                <i class="bi bi-heart-pulse"></i> CAD Risk Prediction
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> Dr. {{ user.full_name.split()[1] }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2><i class="bi bi-heart-pulse-fill"></i> Welcome back, {{ user.full_name }}!</h2>
+                    <p class="mb-0">Stay updated with your patients' CAD risk assessments and clinical insights.</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <span class="badge bg-light text-dark p-2">
+                        <i class="bi bi-calendar"></i> {{ now().strftime('%B %d, %Y') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Left Column - Quick Actions & Stats -->
+            <div class="col-md-3">
+                <!-- Quick Actions Card -->
+                <div class="card stat-card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-lightning-charge"></i> Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('assessment') }}" class="btn btn-primary quick-action-btn">
+                                <i class="bi bi-plus-circle"></i> New Assessment
+                            </a>
+                            <a href="{{ url_for('analytics') }}" class="btn btn-outline-primary quick-action-btn">
+                                <i class="bi bi-bar-chart"></i> Analytics
+                            </a>
+                            <a href="{{ url_for('education') }}" class="btn btn-outline-primary quick-action-btn">
+                                <i class="bi bi-journal-bookmark"></i> Education
+                            </a>
+                            <a href="#" class="btn btn-outline-primary quick-action-btn" data-bs-toggle="modal" data-bs-target="#helpModal">
+                                <i class="bi bi-question-circle"></i> Help & Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Stats Card -->
+                <div class="card stat-card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-graph-up"></i> Quick Stats</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <h3>{{ assessments|length }}</h3>
+                            <p class="text-muted">Total Assessments</p>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="p-2 bg-success bg-opacity-10 rounded">
+                                    <h5 class="text-success">{{ assessments|selectattr('risk_category', 'equalto', 'Low')|list|length }}</h5>
+                                    <small class="text-muted">Low</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-2 bg-warning bg-opacity-10 rounded">
+                                    <h5 class="text-warning">{{ assessments|selectattr('risk_category', 'equalto', 'Medium')|list|length }}</h5>
+                                    <small class="text-muted">Medium</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-2 bg-danger bg-opacity-10 rounded">
+                                    <h5 class="text-danger">{{ assessments|selectattr('risk_category', 'equalto', 'High')|list|length }}</h5>
+                                    <small class="text-muted">High</small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Average Risk Score</span>
+                            <strong>{{ "%.1f"|format(assessments|map(attribute='probability_score')|sum / assessments|length if assessments else 0) }}%</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Status Card -->
+                <div class="card stat-card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-cpu"></i> System Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <span>Prediction Model: Active</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <span>Database: Connected</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <span>API: Operational</span>
+                        </div>
+                        <small class="text-muted">
+                            Last updated: {{ assessments[0].created_at.strftime('%Y-%m-%d %H:%M') if assessments else 'N/A' }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Recent Assessments & Activity -->
+            <div class="col-md-9">
+                <!-- Recent Assessments Card -->
+                <div class="card stat-card mb-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Assessments</h5>
+                        <span class="badge bg-light text-primary">{{ assessments|length }} Total</span>
+                    </div>
+                    <div class="card-body">
+                        {% if assessments %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Date/Time</th>
+                                            <th>Patient</th>
+                                            <th>Clinical Parameters</th>
+                                            <th>Risk Category</th>
+                                            <th>Probability</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for assessment in assessments %}
+                                        <tr>
+                                            <td>
+                                                <small>{{ assessment.created_at.strftime('%Y-%m-%d') }}</small><br>
+                                                <small class="text-muted">{{ assessment.created_at.strftime('%H:%M') }}</small>
+                                            </td>
+                                            <td>
+                                                <strong>{{ assessment.age }}y</strong> / {{ assessment.sex[:1]|upper }}<br>
+                                                <small class="text-muted">ID: #{{ assessment.id }}</small>
+                                            </td>
+                                            <td>
+                                                <small>
+                                                    BP: {{ assessment.systolic_bp }}/{{ assessment.diastolic_bp }}<br>
+                                                    Chol: {{ assessment.total_cholesterol }}
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <span class="badge risk-badge bg-{% if assessment.risk_category == 'Low' %}success{% elif assessment.risk_category == 'Medium' %}warning text-dark{% else %}danger{% endif %}">
+                                                    <i class="bi bi-{% if assessment.risk_category == 'Low' %}check-circle{% elif assessment.risk_category == 'Medium' %}exclamation-triangle{% else %}exclamation-octagon{% endif %}"></i>
+                                                    {{ assessment.risk_category }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="progress" style="height: 20px;">
+                                                    <div class="progress-bar bg-{% if assessment.risk_category == 'Low' %}success{% elif assessment.risk_category == 'Medium' %}warning{% else %}danger{% endif %}" 
+                                                         style="width: {{ assessment.probability_score }}%">
+                                                        {{ assessment.probability_score }}%
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ url_for('results', assessment_id=assessment.id) }}" class="btn btn-outline-primary" title="View Details">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <button class="btn btn-outline-secondary" title="Print" onclick="printAssessment({{ assessment.id }})">
+                                                        <i class="bi bi-printer"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-info" title="Share" data-bs-toggle="modal" data-bs-target="#shareModal" data-assessment-id="{{ assessment.id }}">
+                                                        <i class="bi bi-share"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            {% if assessments|length >= 10 %}
+                            <div class="text-center mt-3">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    View All Assessments <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                            
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-clipboard-x display-1 text-muted"></i>
+                                <p class="text-muted mt-3">No assessments yet. Start by creating your first assessment.</p>
+                                <a href="{{ url_for('assessment') }}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i> Create First Assessment
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Activity Timeline and Insights Row -->
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="card stat-card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="bi bi-activity"></i> Activity Timeline</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-timeline">
+                                    {% if assessments %}
+                                        {% for assessment in assessments[:5] %}
+                                        <div class="activity-item">
+                                            <div class="d-flex justify-content-between">
+                                                <strong>Assessment #{{ assessment.id }}</strong>
+                                                <small class="activity-time">{{ assessment.created_at.strftime('%H:%M, %b %d') }}</small>
+                                            </div>
+                                            <p class="mb-1">Patient: {{ assessment.age }} years, {{ assessment.sex|title }}</p>
+                                            <div class="d-flex align-items-center">
+                                                <span class="badge bg-{% if assessment.risk_category == 'Low' %}success{% elif assessment.risk_category == 'Medium' %}warning{% else %}danger{% endif %} me-2">
+                                                    {{ assessment.risk_category }} Risk
+                                                </span>
+                                                <small class="text-muted">{{ assessment.probability_score }}% probability</small>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p class="text-muted text-center">No recent activity</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <div class="card stat-card">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Clinical Insights</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i>
+                                    <strong>Did you know?</strong>
+                                    <p class="mb-0 mt-2">Regular physical activity can reduce CAD risk by up to 30%.</p>
+                                </div>
+                                
+                                <div class="alert alert-success">
+                                    <i class="bi bi-check-circle"></i>
+                                    <strong>Best Practice:</strong>
+                                    <p class="mb-0 mt-2">Update patient lifestyle factors every 6 months for accurate risk assessment.</p>
+                                </div>
+                                
+                                <div class="list-group">
+                                    <a href="{{ url_for('education') }}#risk-factors" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-exclamation-triangle text-warning"></i> Understanding Risk Factors
+                                    </a>
+                                    <a href="{{ url_for('education') }}#prevention" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-shield-check text-success"></i> Prevention Strategies
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#guidelinesModal">
+                                        <i class="bi bi-file-text text-primary"></i> Clinical Guidelines
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-question-circle"></i> Help & Support</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Quick Tips:</h6>
+                    <ul>
+                        <li>Use "New Assessment" to calculate CAD risk for a patient</li>
+                        <li>View detailed analytics in the Analytics dashboard</li>
+                        <li>Access educational resources in the Education section</li>
+                        <li>Export data for further analysis</li>
+                    </ul>
+                    <h6>Need more help?</h6>
+                    <p>Contact support at support@cadprediction.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Guidelines Modal -->
+    <div class="modal fade" id="guidelinesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="bi bi-file-text"></i> Clinical Guidelines</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>ACC/AHA Prevention Guidelines</h6>
+                    <ul>
+                        <li>Adults aged 40-75 should have 10-year ASCVD risk assessment</li>
+                        <li>Reassess risk every 4-6 years in low-risk individuals</li>
+                        <li>More frequent assessment if risk factors change</li>
+                        <li>Consider risk-enhancing factors in borderline cases</li>
+                    </ul>
+                    <h6>Risk Categories:</h6>
+                    <ul>
+                        <li><span class="badge bg-success">Low Risk</span>: &lt;7.5% - Lifestyle modifications</li>
+                        <li><span class="badge bg-warning text-dark">Medium Risk</span>: 7.5-19.9% - Consider statin therapy</li>
+                        <li><span class="badge bg-danger">High Risk</span>: ≥20% - Statin indicated</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Share Modal -->
+    <div class="modal fade" id="shareModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="bi bi-share"></i> Share Assessment</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Share assessment results with colleagues or patients:</p>
+                    <div class="mb-3">
+                        <label class="form-label">Email address</label>
+                        <input type="email" class="form-control" placeholder="colleague@hospital.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message (optional)</label>
+                        <textarea class="form-control" rows="3" placeholder="Add a message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mt-5 py-3 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small class="text-muted">
+                        <i class="bi bi-heart-pulse"></i> CAD Risk Prediction System v1.0
+                    </small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-muted">
+                        <a href="#" class="text-decoration-none me-2">Privacy</a>
+                        <a href="#" class="text-decoration-none me-2">Terms</a>
+                        <a href="#" class="text-decoration-none">Contact</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Print assessment function
+        function printAssessment(assessmentId) {
+            window.open(`/results/${assessmentId}?print=true`, '_blank');
+        }
+        
+        // Share modal handler
+        var shareModal = document.getElementById('shareModal');
+        if (shareModal) {
+            shareModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var assessmentId = button.getAttribute('data-assessment-id');
+                // You can populate assessment details here
+            });
+        }
+        
+        // Auto-refresh data every 5 minutes (optional)
+        setTimeout(function() {
+            location.reload();
+        }, 300000); // 5 minutes
+        
+        // Tooltip initialization
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>
